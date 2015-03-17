@@ -3,7 +3,7 @@
 addEvent("kickMeBecauseWrongVersion",true)
 function kickMeBecauseWrongVersion_func(player)
 	if source ~= client then return end
-	kickPlayer(player,"You have an older Version, upgrade on www.mtasa.com!")
+	kickPlayer(player,"Du hast eine alte Version von MTA! Upgrade, bevor du dich einloggst!")
 end
 addEventHandler("kickMeBecauseWrongVersion",getRootElement(),kickMeBecauseWrongVersion_func)
 
@@ -52,9 +52,9 @@ function loadSettingsFromDB()
 	serversettings["playerOfMonthPic"]=MySQL_GetString("serversettings", "Wert","Name='spielerDesMonats'")
 	--setServerName ("German TerraTex Reallife by www.tt-rl.de Version "..serversettings["Version"])
 
-    setGameType("TerraTex Reallife Script "..serversettings["Version"])
+    setGameType("Tierra Reallife v1.0")
     setRuleValue ("Homepage",config["maindomain"])
-    setMapName ("TerraTex")
+    setMapName ("Tierra Reallife")
     resetWaterLevel(0)
 
 
