@@ -1,28 +1,28 @@
 -- not used in all files... will be set later
 config={}
 -- Name of Owner
-config["owner"]="[TTeam]Geramy92"
+config["owner"]="[TP]iCompaq"
 
 --Supportemail
-config["supportmail"]="server@terratex.eu"
+config["supportmail"]="server@tierra-rl.eu"
 
 -- array with all domains which should not found in Anti-Advertise-Functions
-config["domains"]={"terratex.eu","tt-rl.de"} 
+config["domains"]={"tierra-rl.eu","tierra-rl.eu"} 
 
 -- Main Domain / will later be set in credits or info guis
-config["maindomain"]="http://terratex.eu"
+config["maindomain"]="http://tierra-rl.eu"
 
 --Bugtracker URL
-config["bugdomain"]="https://github.com/geramy92/TT-SA-REALLIFE/issues";
+config["bugdomain"]="https://github.com/icompaq/TIERRA-REALLIFE/issues";
 
 --IP or Domain to Teamspeak3
-config["teamspeak"]="terratex.eu"
+config["teamspeak"]="folgt"
 
 --Clantag: will protect Register with this tag or names of Clanmembers without this tag (Will set that [ABC]DEF is the same like DEF in checkups)
-config["clantag"]="[TTeam]"
+config["clantag"]="[TP]"
 
 --Community Name - The Name of the Community, which should be written f.e. in credits
-config["communityname"]="TerraTex"
+config["communityname"]="Tierra Reallife"
 
 --passwort Hash Algo ... 
 --Options:  
@@ -33,10 +33,10 @@ config["communityname"]="TerraTex"
 config["password_hash"]="sha512"
 
 --Mappername
-config["mappername"]="[TTeam]Blizard"
+config["mappername"]="[TP]Poldi"
 
 --Scriptername
-config["scriptername"]="[TTeam]Geramy92 und [TTeam]Maxx"
+config["scriptername"]="[TP]iCompaq"
 
 --MYSQL CONFIG:
 config["mysqlhost"]="localhost"
