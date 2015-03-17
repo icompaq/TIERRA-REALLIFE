@@ -1,5 +1,5 @@
 --Defs
-local minFrameRate=10
+local minFrameRate=0
 local crashesToKick=10
 local showWarning=true
 
@@ -43,7 +43,7 @@ function onFrameRateCount()
 	actualFramesPerSecond=actualFramesPerSecond+1
 	
 	if((crashesToKick/3)<frameCrashLastPerMinute and actualFramesPerSecond<minFrameRate)then
-		dxDrawText("ACHTUNG! IHRE FRAMERATE IST ZU NIEDRIG!\n(Frameraten können mit /frames gesehen werden)", (screenW - 815) / 2, (screenH - 65) / 2, ((screenW - 815) / 2) + 815, ( (screenH - 65) / 2) + 65, tocolor(255, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, true, false, false)
+		dxDrawText("", (screenW - 815) / 2, (screenH - 65) / 2, ((screenW - 815) / 2) + 815, ( (screenH - 65) / 2) + 65, tocolor(255, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, true, false, false)
 	end
 	
 	if(showFrames)then
