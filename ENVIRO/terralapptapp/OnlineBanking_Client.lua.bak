@@ -1,0 +1,582 @@
+local obMyPlayer, obMyPlayerName
+obWindowOpen = false -- Bool, fenster geöfnet
+local obIsClientClickAdded = false -- Bool, Client Click added
+local obIsClientClickReallyAdded = false -- Bool, Client Click added
+local obIsWindowUeberweisung = false -- Bool, Überweisungsfenster geöffnet
+local tanKey = ""
+local obClientX, obClientY = guiGetScreenSize()	-- Auflösung Client
+-----------------------------------------------------------------------
+-- obFrmMain ---------------------------------------------------
+-----------------------------------------------------------------------
+local obFrmMainWidth = 566 -- Breite des Fenster
+local obFrmMainHeight = 723 -- Höhe des Fenster
+local obFrmMainX = (obClientX / 2 - obFrmMainWidth / 2)-- x Achse des Fenster
+local obFrmMainY = (obClientY / 2 - obFrmMainHeight / 2) -- y Achse des Fenster
+local obFrmMainPath = "FILES/IMAGES/lapptapp/obFrmMain.png" -- Pfad zum Hauptfenster
+-----------------------------------------------------------------------
+-- obFrmMainLabel -------------------------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelStartX = obFrmMainX + 18 -- Start x
+local obFrmMainLabelStartY = obFrmMainY + 450 -- Start y
+local obFrmMainLabelBreite = 140 -- Breite des Labels
+local obFrmMainLabelHoehe = 40 -- Höhe des Labels
+local obFrmMainLabelAbstand = 50	-- höhenabstand der Labels
+local obFrmMainLabelFarbe = tocolor(255, 255,  255, 255) -- Text farbe
+local obFrmMainLabelScale = 2 -- Größe der Schrit
+local obFrmMainLabelSchrift = "default" -- Schriftart
+-----------------------------------------------------------------------
+-- obFrmMainLabelBargeldText --------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelBargeldTextStartX = obFrmMainLabelStartX -- Start X
+local obFrmMainLabelBargeldTextStartY = obFrmMainLabelStartY -- Start Y
+local obFrmMainLabelBargeldTextEndeX = obFrmMainLabelBargeldTextStartX + obFrmMainLabelBreite -- Ende X
+local obFrmMainLabelBargeldTextEndeY = obFrmMainLabelBargeldTextStartY + obFrmMainLabelHoehe	-- Ende Y
+local obFrmMainLabelBargeldTextText = "Soweit alles OK, Daten werden nun an den Server übermittelt. Bitte hab ein wenig gedult." -- Bargeld Text
+-----------------------------------------------------------------------
+-- obFrmMainLabelBargeldStand ------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelBargeldStandStartX = obFrmMainLabelStartX + obFrmMainLabelBreite -- Start X
+local obFrmMainLabelBargeldStandStartY = obFrmMainLabelStartY -- Start Y
+local obFrmMainLabelBargeldStandEndeX = obFrmMainLabelBargeldStandStartX + ((obFrmMainLabelBreite * 2) / 1.5) + 10 -- Ende X
+local obFrmMainLabelBargeldStandEndeY = obFrmMainLabelBargeldStandStartY + obFrmMainLabelHoehe -- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelKontostandText --------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelKontostandTextStartX = obFrmMainLabelStartX -- Start X
+local obFrmMainLabelKontostandTextStartY = obFrmMainLabelBargeldTextStartY + obFrmMainLabelAbstand -- Start Y
+local obFrmMainLabelKontostandTextEndeX = obFrmMainLabelKontostandTextStartX + obFrmMainLabelBreite -- Ende X
+local obFrmMainLabelKontostandTextEndeY = obFrmMainLabelKontostandTextStartY + obFrmMainLabelHoehe -- Ende Y
+local obFrmMainLabelKontostandTextText = "Keine Kontodeckung vorhanden.\nDu hast nicht genug Geld auf dem Konto zum durchführen dieser Überweisung." -- Text
+-----------------------------------------------------------------------
+-- obFrmMainLabelKontostandStand ------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelKontostandStandStartX = obFrmMainLabelStartX + obFrmMainLabelBreite -- Start X
+local obFrmMainLabelKontostandStandStartY = obFrmMainLabelKontostandTextStartY -- Start Y
+local obFrmMainLabelKontostandStandEndeX = obFrmMainLabelKontostandStandStartX + ((obFrmMainLabelBreite * 2) / 1.5) + 10 -- Ende X
+local obFrmMainLabelKontostandStandEndeY = obFrmMainLabelKontostandStandStartY + obFrmMainLabelHoehe -- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelGespendetText ---------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelGespendetTextStartX = obFrmMainLabelStartX -- Start X
+local obFrmMainLabelGespendetTextStartY = obFrmMainLabelKontostandTextStartY + obFrmMainLabelAbstand -- Start Y
+local obFrmMainLabelGespendetTextEndeX = obFrmMainLabelGespendetTextStartX + obFrmMainLabelBreite -- Ende X
+local obFrmMainLabelGespendetTextEndeY = obFrmMainLabelGespendetTextStartY + obFrmMainLabelHoehe -- Ende Y
+local obFrmMainLabelGespendetTextText = "Negative Überweisungssumme angegeben.\nEs muss eine Positive Summe angegeben werden." -- Text
+-----------------------------------------------------------------------
+-- obFrmMainLabelGespendetStand -------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelGespendetStandStartX = obFrmMainLabelStartX + obFrmMainLabelBreite -- Start X
+local obFrmMainLabelGespendetStandStartY = obFrmMainLabelGespendetTextStartY -- Start Y
+local obFrmMainLabelGespendetStandEndeX = obFrmMainLabelGespendetStandStartX + ((obFrmMainLabelBreite * 2) / 1.5) + 10 -- Ende X
+local obFrmMainLabelGespendetStandEndeY = obFrmMainLabelGespendetStandStartY + obFrmMainLabelHoehe -- Ende Y
+-----------------------------------------------------------------------
+-- obBtnFrmMainUeberweisung -------------------------
+-----------------------------------------------------------------------
+local obBtnFrmMainUeberweisungX = obFrmMainX + 47 -- Start X
+local obBtnFrmMainUeberweisungY = obFrmMainY + 151 -- Start Y
+local obBtnFrmMainUeberweisungBreite = 310 -- Ende X
+local obBtnFrmMainUeberweisungHoehe = 75 -- Ende Y
+-----------------------------------------------------------------------
+-- obBtnFrmMainSpenden ---------------------------------
+-----------------------------------------------------------------------
+local obBtnFrmMainSpendenX = obFrmMainX + 47 -- Start X
+local obBtnFrmMainSpendenY = obFrmMainY + 265 -- Start Y
+local obBtnFrmMainSpendenBreite = 310 -- Ende X
+local obBtnFrmMainSpendenHoehe = 75 -- Ende Y
+-----------------------------------------------------------------------
+-- obBtnFrmMainSchliessen ------------------------------
+-----------------------------------------------------------------------
+local obBtnFrmMainSchliessenX = obFrmMainX + 510 -- Start X
+local obBtnFrmMainSchliessenY = obFrmMainY + 8 -- Start Y
+local obBtnFrmMainSchliessenBreite = 50 -- Ende X
+local obBtnFrmMainSchliessenHoehe = 40 -- Ende Y
+-----------------------------------------------------------------------
+-- obFrmUeberweisung --------------------------------------
+-----------------------------------------------------------------------
+local obFrmUeberweisungWidth = 677 -- Breite des Fenster
+local obFrmUeberweisungHeight = 493 -- Höhe des Fenster
+local obFrmUeberweisungX = (obClientX / 2 - obFrmUeberweisungWidth / 2)-- x Achse des Fenster
+local obFrmUeberweisungY = (obClientY / 2 - obFrmUeberweisungHeight / 2) -- y Achse des Fenster
+local obFrmUeberweisungPath = "FILES/IMAGES/lapptapp/obSEPARoh.jpg" -- Pfad zum Hauptfenster
+-----------------------------------------------------------------------
+-- obFrmUeberweisungTAN -------------------------------
+-----------------------------------------------------------------------
+local obFrmUeberweisungTANWidth = 309 -- Breite des Fenster
+local obFrmUeberweisungTANHeight = 355 -- Höhe des Fenster
+local obFrmUeberweisungTANX = obFrmUeberweisungX + obFrmUeberweisungWidth -- x Achse des Fenster
+local obFrmUeberweisungTANY = obFrmUeberweisungY -- y Achse des Fenster
+local obFrmUeberweisungTANPath = "FILES/IMAGES/lapptapp/obTAN.png" -- Pfad zum Hauptfenster
+-----------------------------------------------------------------------
+-- obFrmUeberweisungLogo -------------------------------
+-----------------------------------------------------------------------
+local obFrmUeberweisungLogoWidth = 168 -- Breite des Fenster
+local obFrmUeberweisungLogoHeight = 44 -- Höhe des Fenster
+local obFrmUeberweisungLogoX = obFrmUeberweisungX + 30 -- x Achse des Fenster
+local obFrmUeberweisungLogoY = obFrmUeberweisungY + 25 -- y Achse des Fenster
+local obFrmUeberweisungLogoPath = "FILES/IMAGES/lapptapp/OnlineBankingLogo.png" -- Pfad zum Hauptfenster
+-----------------------------------------------------------------------
+-- obFrmMainLabelIBANOneText -----------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelIBANOneTextStartX = obFrmUeberweisungX + 54 -- Start X
+local obFrmMainLabelIBANOneTextStartY = obFrmUeberweisungY + 130 -- Start Y
+local obFrmMainLabelIBANOneTextEndeX = obFrmMainLabelIBANOneTextStartX + 60 -- Ende X
+local obFrmMainLabelIBANOneTextEndeY = obFrmMainLabelIBANOneTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelIBANTwoText -----------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelIBANTwoTextStartX = obFrmUeberweisungX + 125 -- Start X
+local obFrmMainLabelIBANTwoTextStartY = obFrmUeberweisungY + 130 -- Start Y
+local obFrmMainLabelIBANTwoTextEndeX = obFrmMainLabelIBANTwoTextStartX + 60 -- Ende X
+local obFrmMainLabelIBANTwoTextEndeY = obFrmMainLabelIBANTwoTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelIBANThreeText ---------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelIBANThreeTextStartX = obFrmUeberweisungX + 196 -- Start X
+local obFrmMainLabelIBANThreeTextStartY = obFrmUeberweisungY + 130 -- Start Y
+local obFrmMainLabelIBANThreeTextEndeX = obFrmMainLabelIBANThreeTextStartX + 60 -- Ende X
+local obFrmMainLabelIBANThreeTextEndeY = obFrmMainLabelIBANThreeTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelIBANFourText -----------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelIBANFourTextStartX = obFrmUeberweisungX + 267 -- Start X
+local obFrmMainLabelIBANFourTextStartY = obFrmUeberweisungY + 130 -- Start Y
+local obFrmMainLabelIBANFourTextEndeX = obFrmMainLabelIBANFourTextStartX + 60 -- Ende X
+local obFrmMainLabelIBANFourTextEndeY = obFrmMainLabelIBANFourTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelIBANFiveText -----------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelIBANFiveTextStartX = obFrmUeberweisungX + 338 -- Start X
+local obFrmMainLabelIBANFiveTextStartY = obFrmUeberweisungY + 130 -- Start Y
+local obFrmMainLabelIBANFiveTextEndeX = obFrmMainLabelIBANFiveTextStartX + 60 -- Ende X
+local obFrmMainLabelIBANFiveTextEndeY = obFrmMainLabelIBANFiveTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelBICText -------------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelBICTextStartX = obFrmUeberweisungX + 54 -- Start X
+local obFrmMainLabelBICTextStartY = obFrmUeberweisungY + 165 -- Start Y
+local obFrmMainLabelBICTextEndeX = obFrmMainLabelBICTextStartX + 300 -- Ende X
+local obFrmMainLabelBICTextEndeY = obFrmMainLabelBICTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelSenderText --------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelSenderTextStartX = obFrmUeberweisungX + 54 -- Start X
+local obFrmMainLabelSenderTextStartY = obFrmUeberweisungY + 318 -- Start Y
+local obFrmMainLabelSenderTextEndeX = obFrmMainLabelSenderTextStartX + 300 -- Ende X
+local obFrmMainLabelSenderTextEndeY = obFrmMainLabelSenderTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelSenderIBANText -------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelSenderIBANTextStartX = obFrmUeberweisungX + 54 -- Start X
+local obFrmMainLabelSenderIBANTextStartY = obFrmUeberweisungY + 360 -- Start Y
+local obFrmMainLabelSenderIBANTextEndeX = obFrmMainLabelSenderIBANTextStartX + 500 -- Ende X
+local obFrmMainLabelSenderIBANTextEndeY = obFrmMainLabelSenderIBANTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelSenderBICText ---------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelSenderBICTextStartX = obFrmUeberweisungX + 330 -- Start X
+local obFrmMainLabelSenderBICTextStartY = obFrmUeberweisungLogoY -- Start Y
+local obFrmMainLabelSenderBICTextEndeX = obFrmMainLabelSenderBICTextStartX + 500 -- Ende X
+local obFrmMainLabelSenderBICTextEndeY = obFrmMainLabelSenderBICTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainLabelDatumText ---------------------------
+-----------------------------------------------------------------------
+local obFrmMainLabelDatumTextStartX = obFrmUeberweisungX + 54 -- Start X
+local obFrmMainLabelDatumTextStartY = obFrmUeberweisungY + 410 -- Start Y
+local obFrmMainLabelDatumTextEndeX = obFrmMainLabelDatumTextStartX + 500 -- Ende X
+local obFrmMainLabelDatumTextEndeY = obFrmMainLabelDatumTextStartY + obFrmMainLabelHoehe	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainButtonTANF ---------------------------------
+-----------------------------------------------------------------------
+local obFrmMainButtonTANFStartX = obFrmUeberweisungTANX + 204 -- Start X
+local obFrmMainButtonTANFStartY = obFrmUeberweisungY + 141 -- Start Y
+local obFrmMainButtonTANFEndeX = 42 -- Ende X
+local obFrmMainButtonTANFEndeY = 27	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainButtonTANC ---------------------------------
+-----------------------------------------------------------------------
+local obFrmMainButtonTANCStartX = obFrmUeberweisungTANX + 204 -- Start X
+local obFrmMainButtonTANCStartY = obFrmUeberweisungY + 171 -- Start Y
+local obFrmMainButtonTANCEndeX = 42 -- Ende X
+local obFrmMainButtonTANCEndeY = 27	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainButtonTANOK ------------------------------
+-----------------------------------------------------------------------
+local obFrmMainButtonTANOKStartX = obFrmUeberweisungTANX + 204 -- Start X
+local obFrmMainButtonTANOKStartY = obFrmUeberweisungY + 231 -- Start Y
+local obFrmMainButtonTANOKEndeX = 42 -- Ende X
+local obFrmMainButtonTANOKEndeY = 27	-- Ende Y
+-----------------------------------------------------------------------
+-- obFrmMainDisplayTANOK -----------------------------
+-----------------------------------------------------------------------
+local obFrmMainDisplayTANOKStartX = obFrmUeberweisungTANX + 80 -- Start X
+local obFrmMainDisplayTANOKStartY = obFrmUeberweisungTANY + 60 -- Start Y
+local obFrmMainDisplayTANOKEndeX = obFrmMainDisplayTANOKStartX + 200 -- Ende X
+local obFrmMainDisplayTANOKEndeY = obFrmMainDisplayTANOKStartY + 40	-- Ende Y
+
+-- Zweck 1 Y 244
+-- Zweck 2 Y 280
+
+function OnlineBanking_CheckSign(zahl)
+	if (zahl < 10) then 
+		return tostring(zahl)
+	elseif (zahl == 10) then
+		return "A"
+	elseif (zahl == 11) then
+		return "a"
+	elseif (zahl == 12) then
+		return "B"
+	elseif (zahl == 13) then
+		return "b"
+	elseif (zahl == 14) then
+		return "C"
+	elseif (zahl == 15) then
+		return "c"
+	elseif (zahl == 16) then
+		return "D"
+	elseif (zahl == 17) then
+		return "d"
+	elseif (zahl == 18) then
+		return "E"
+	elseif (zahl == 19) then
+		return "e"
+	elseif (zahl == 20) then
+		return "F"
+	elseif (zahl == 21) then
+		return "f"
+	elseif (zahl == 22) then
+		return "G"
+	elseif (zahl == 23) then
+		return "g"
+	elseif (zahl == 24) then
+		return "H"
+	elseif (zahl == 25) then
+		return "h"
+	elseif (zahl == 26) then
+		return "I"
+	elseif (zahl == 27) then
+		return "i"
+	elseif (zahl == 28) then
+		return "J"
+	elseif (zahl == 29) then
+		return "j"
+	elseif (zahl == 30) then
+		return "K"
+	elseif (zahl == 31) then
+		return "k"
+	elseif (zahl == 32) then
+		return "L"
+	elseif (zahl == 33) then
+		return "l"
+	elseif (zahl == 34) then
+		return "M"
+	elseif (zahl == 35) then
+		return "m"
+	elseif (zahl == 36) then
+		return "N"
+	elseif (zahl == 37) then
+		return "n"
+	elseif (zahl == 38) then
+		return "O"
+	elseif (zahl == 39) then
+		return "o"
+	elseif (zahl == 40) then
+		return "P"
+	elseif (zahl == 41) then
+		return "p"
+	elseif (zahl == 42) then
+		return "Q"
+	elseif (zahl == 43) then
+		return "q"
+	elseif (zahl == 44) then
+		return "R"
+	elseif (zahl == 45) then
+		return "r"
+	elseif (zahl == 46) then
+		return "S"
+	elseif (zahl == 47) then
+		return "s"
+	elseif (zahl == 48) then
+		return "T"
+	elseif (zahl == 49) then
+		return "t"
+	elseif (zahl == 50) then
+		return "U"
+	elseif (zahl == 51) then
+		return "u"
+	elseif (zahl == 52) then
+		return "V"
+	elseif (zahl == 53) then
+		return "v"
+	elseif (zahl == 54) then
+		return "W"
+	elseif (zahl == 55) then
+		return "w"
+	elseif (zahl == 56) then
+		return "X"
+	elseif (zahl == 57) then
+		return "x"
+	elseif (zahl == 58) then
+		return "Y"
+	elseif (zahl == 59) then
+		return "y"
+	elseif (zahl == 60) then
+		return "Z"
+	elseif (zahl == 61) then
+		return "z"
+	end
+end
+
+function OnlineBanking_ButtonTasteF()
+	showError(obMyPlayer, "Kein Empfänger angegeben.\nDu musst einen Empfänger angeben.")
+	tanKey = ""
+	for i = 1, 8, 1 do
+		tanKey = tanKey .. tostring(OnlineBanking_CheckSign(math.random(0, 61)))
+	end
+end
+
+function OnlineBanking_ButtonTasteC()
+	tanKey = ""
+	OnlineBanking_RemoveHandlerUeberweisung()
+	OnlineBanking_AddHandler()
+	obIsClientClickAdded = true
+end
+
+function OnlineBanking_ButtonTasteOK()
+	-- Überweisung durchführen
+	showError(obMyPlayer, "OK")
+end
+
+function OnlineBanking_DrawWindowUeberweisungBIC()
+	if (OnlineBanking_DrawText("RZSTAT2G377", obFrmMainLabelBICTextStartX, obFrmMainLabelBICTextStartY, obFrmMainLabelBICTextEndeX, obFrmMainLabelBICTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 19")) then
+		return true
+	end
+	return false
+end
+
+function OnlineBanking_DrawWindowUeberweisungIBAN()
+	if (OnlineBanking_DrawText("SA47", obFrmMainLabelIBANOneTextStartX, obFrmMainLabelIBANOneTextStartY, obFrmMainLabelIBANOneTextEndeX, obFrmMainLabelIBANOneTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 14")) then
+		if (OnlineBanking_DrawText("3837", obFrmMainLabelIBANTwoTextStartX, obFrmMainLabelIBANTwoTextStartY, obFrmMainLabelIBANTwoTextEndeX, obFrmMainLabelIBANTwoTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 15")) then
+			if (OnlineBanking_DrawText("7000", obFrmMainLabelIBANThreeTextStartX, obFrmMainLabelIBANThreeTextStartY, obFrmMainLabelIBANThreeTextEndeX, obFrmMainLabelIBANThreeTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 16")) then
+				if (OnlineBanking_DrawText("0008", obFrmMainLabelIBANFourTextStartX, obFrmMainLabelIBANFourTextStartY, obFrmMainLabelIBANFourTextEndeX, obFrmMainLabelIBANFourTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 17")) then
+					if (OnlineBanking_DrawText("5498", obFrmMainLabelIBANFiveTextStartX, obFrmMainLabelIBANFiveTextStartY, obFrmMainLabelIBANFiveTextEndeX, obFrmMainLabelIBANFiveTextEndeY, tocolor(0, 0, 0, 255), 1.9, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 18")) then
+						return true
+					end
+				end
+			end
+		end
+	end
+	return false
+end
+
+function OnlineBanking_DrawWindowUeberweisung()
+	if (OnlineBanking_DrawImage(obFrmUeberweisungX, obFrmUeberweisungY, obFrmUeberweisungWidth, obFrmUeberweisungHeight, obFrmUeberweisungPath, 0, 0, 0, nil, true, "OnlineBanking_Client.lua, 12")) then -- Hauptfenster erstellen
+		if (OnlineBanking_DrawImage(obFrmUeberweisungTANX, obFrmUeberweisungTANY, obFrmUeberweisungTANWidth, obFrmUeberweisungTANHeight, obFrmUeberweisungTANPath, 0, 0, 0, nil, true, "OnlineBanking_Client.lua, 24")) then -- Hauptfenster erstellen
+			if (OnlineBanking_DrawImage(obFrmUeberweisungLogoX, obFrmUeberweisungLogoY, obFrmUeberweisungLogoWidth, obFrmUeberweisungLogoHeight, obFrmUeberweisungLogoPath, 0, 0, 0, nil, true, "OnlineBanking_Client.lua, 20")) then -- Hauptfenster erstellen
+				if (OnlineBanking_DrawWindowUeberweisungIBAN()) then
+					if (OnlineBanking_DrawWindowUeberweisungBIC()) then
+						if (OnlineBanking_DrawText(obMyPlayerName, obFrmMainLabelSenderTextStartX, obFrmMainLabelSenderTextStartY, obFrmMainLabelSenderTextEndeX, obFrmMainLabelSenderTextEndeY, tocolor(0, 0, 0, 255), 1.6, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 21")) then
+							if (OnlineBanking_DrawText("SA11       9137       1195        9117       5007", obFrmMainLabelSenderIBANTextStartX, obFrmMainLabelSenderIBANTextStartY, obFrmMainLabelSenderIBANTextEndeX, obFrmMainLabelSenderIBANTextEndeY, tocolor(0, 0, 0, 255), 1.6, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 22")) then
+								if (OnlineBanking_DrawText("RZSTAT2G377", obFrmMainLabelSenderBICTextStartX, obFrmMainLabelSenderBICTextStartY, obFrmMainLabelSenderBICTextEndeX, obFrmMainLabelSenderBICTextEndeY, tocolor(0, 0, 0, 255), 2, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 25")) then
+									local curTime = getRealTime()
+									if (OnlineBanking_DrawText(curTime.monthday .. "." .. (curTime.month + 1) .. "." .. (curTime.year + 1900), obFrmMainLabelDatumTextStartX, obFrmMainLabelDatumTextStartY, obFrmMainLabelDatumTextEndeX, obFrmMainLabelDatumTextEndeY, tocolor(0, 0, 0, 255), 1.8, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 23")) then
+										if (OnlineBanking_DrawText(tanKey, obFrmMainDisplayTANOKStartX, obFrmMainDisplayTANOKStartY, obFrmMainDisplayTANOKEndeX, obFrmMainDisplayTANOKEndeY, tocolor(0, 0, 0, 255), 2, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 26")) then
+											
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function OnlineBanking_IsCursorOnElement(cursorX, cursorY, x, y, w, h)
+	if (cursorX >= x and cursorX <= (x + w) and cursorY >= y and cursorY <= (y + h)) then
+		return true
+	else
+		return false
+	end
+end
+
+function OnlineBanking_RemoveHandlerUeberweisung()
+	obIsWindowUeberweisung = false
+	if (removeEventHandler("onClientRender", getRootElement(), OnlineBanking_DrawWindowUeberweisung)) then
+		return true
+	else
+		return false
+	end
+end
+
+function OnlineBanking_AddHandlerUeberweisung() -- Fenster Überweisung anzeigen, Eventhandler hinzufügen.
+	obIsWindowUeberweisung = true
+	if (addEventHandler("onClientRender", getRootElement(), OnlineBanking_DrawWindowUeberweisung)) then
+		return true
+	else
+		return false
+	end
+end
+
+function OnlineBanking_AddHandler() -- Fenster anzeigen, Eventhandler hinzufügen
+	obMyPlayer = getLocalPlayer()
+	obMyPlayerName = getPlayerName(obMyPlayer)
+	obWindowOpen = true
+	if (addEventHandler("onClientRender", getRootElement(), OnlineBanking_DrawWindow)) then
+		return true
+	else
+		return false
+	end
+end
+
+function OnlineBanking_RemoveClickHandler()
+	obIsClientClickAdded = false
+	-- if (removeEventHandler("onClientClick", getRootElement(), OnlineBanking_ButtonClick)) then
+		return true
+	-- else
+		-- return false
+	-- end
+end
+
+function OnlineBanking_RemoveHandler() -- Fenster entfernen, EventHandler löschen
+	if (removeEventHandler("onClientRender", getRootElement(), OnlineBanking_DrawWindow)) then
+		return true
+	else
+		return false
+	end
+end
+
+function OnlineBanking_ButtonClick(btn, state, cursorX, cursorY)
+	-- if (not obIsClientClickAdded) then return end
+	if (btn == "left" and state == "down") then
+		if (obIsClientClickAdded) then
+			-- Button Ueberweisung
+			if (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obBtnFrmMainUeberweisungX, obBtnFrmMainUeberweisungY, obBtnFrmMainUeberweisungBreite, obBtnFrmMainUeberweisungHoehe)) then
+				if (OnlineBanking_RemoveClickHandler()) then
+					if (OnlineBanking_RemoveHandler()) then
+						if (not OnlineBanking_AddHandlerUeberweisung()) then
+							showError(obMyPlayer, string.format("Achtung\nDer Code ist nur 3 Minuten gültig.", "OnlineBanking_Client.lua, 11")) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+						end
+					end
+				end
+			-- Button Spenden
+			elseif (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obBtnFrmMainSpendenX, obBtnFrmMainSpendenY, obBtnFrmMainSpendenBreite, obBtnFrmMainSpendenHoehe)) then
+				showError(obMyPlayer, "Spenden")
+			-- Button Schließen
+			elseif (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obBtnFrmMainSchliessenX, obBtnFrmMainSchliessenY, obBtnFrmMainSchliessenBreite, obBtnFrmMainSchliessenHoehe)) then
+				OnlineBanking_ToggleShow() 
+			end
+		elseif (obIsWindowUeberweisung) then
+			if (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obFrmMainButtonTANFStartX, obFrmMainButtonTANFStartY, obFrmMainButtonTANFEndeX, obFrmMainButtonTANFEndeY)) then
+				OnlineBanking_ButtonTasteF()
+			elseif (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obFrmMainButtonTANCStartX, obFrmMainButtonTANCStartY, obFrmMainButtonTANCEndeX, obFrmMainButtonTANCEndeY)) then
+				OnlineBanking_ButtonTasteC()
+			elseif (OnlineBanking_IsCursorOnElement(cursorX, cursorY, obFrmMainButtonTANOKStartX, obFrmMainButtonTANOKStartY, obFrmMainButtonTANOKEndeX, obFrmMainButtonTANOKEndeY)) then
+				OnlineBanking_ButtonTasteOK()
+			end
+		end
+	end
+end
+
+function OnlineBanking_DrawTextBalance(text, sx, sy, ex, ey, color, scale, schrift, vert, hor, stop, wrap, oben, errorT) -- DrawText mit grüner oder roter Schriftfarbe
+	local money = tonumber(getElementData(obMyPlayer, text))
+	local farbe = tocolor(255, 255,  255, 255)
+	if (money >= 0) then
+		farbe = tocolor(0, 255,  0, 255)
+	else
+		farbe = tocolor(255, 0,  0, 255)
+	end
+	if (dxDrawText(toprice(money), sx, sy, ex, ey, farbe, scale, schrift, vert, hor, stop, wrap, oben)) then
+		return true
+	else
+		if (not OnlineBanking_RemoveHandler()) then
+			showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		end
+		showError(obMyPlayer, string.format("Achtung\nDer Code ist nur 3 Minuten gültig.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		return false
+	end
+end
+
+function OnlineBanking_DrawText(text, sx, sy, ex, ey, color, scale, schrift, vert, hor, stop, wrap, oben, errorT) -- Draw Text
+	if (dxDrawText(text, sx, sy, ex, ey, color, scale, schrift, vert, hor, stop, wrap, oben)) then
+		return true
+	else
+		if (not OnlineBanking_RemoveHandler()) then
+			showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		end
+		showError(obMyPlayer, string.format("Achtung\nDer Code ist nur 3 Minuten gültig.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		return false
+	end
+end
+
+function OnlineBanking_DrawImage(x, y, w, h, p, rot, rotx, roty, col, oben, errorT) -- Draw Image
+	if (dxDrawImage(x, y, w, h, p, rot, rotx, roty, col, oben)) then
+		return true
+	else
+		if (not OnlineBanking_RemoveHandler()) then
+			showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		end
+		showError(obMyPlayer, string.format("Achtung\nDer Code ist nur 3 Minuten gültig.", errorT)) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		return false
+	end
+end
+
+function OnlineBanking_DrawWindow() -- Main Funktion zum Zeichnen der Überweisungsapp
+	if (OnlineBanking_DrawImage(obFrmMainX, obFrmMainY, obFrmMainWidth, obFrmMainHeight, obFrmMainPath, 0, 0, 0, nil, true, "OnlineBanking_Client.lua, 3")) then -- Hauptfenster erstellen
+		if (OnlineBanking_DrawText(obFrmMainLabelBargeldTextText, obFrmMainLabelBargeldTextStartX, obFrmMainLabelBargeldTextStartY, obFrmMainLabelBargeldTextEndeX, obFrmMainLabelBargeldTextEndeY, obFrmMainLabelFarbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 4")) then -- Bargeld Text
+			if (OnlineBanking_DrawTextBalance("money", obFrmMainLabelBargeldStandStartX, obFrmMainLabelBargeldStandStartY, obFrmMainLabelBargeldStandEndeX, obFrmMainLabelBargeldStandEndeY, farbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "right", "center", true, false, true, "OnlineBanking_Client.lua, 5")) then -- Bargeld Stand
+				if (OnlineBanking_DrawText(obFrmMainLabelKontostandTextText, obFrmMainLabelKontostandTextStartX, obFrmMainLabelKontostandTextStartY, obFrmMainLabelKontostandTextEndeX, obFrmMainLabelKontostandTextEndeY, obFrmMainLabelFarbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 6")) then -- Bargeld Text
+					if (OnlineBanking_DrawTextBalance("bank", obFrmMainLabelKontostandStandStartX, obFrmMainLabelKontostandStandStartY, obFrmMainLabelKontostandStandEndeX, obFrmMainLabelKontostandStandEndeY, farbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "right", "center", true, false, true, "OnlineBanking_Client.lua, 7")) then -- Bargeld Stand
+						if (OnlineBanking_DrawText(obFrmMainLabelGespendetTextText, obFrmMainLabelGespendetTextStartX, obFrmMainLabelGespendetTextStartY, obFrmMainLabelGespendetTextEndeX, obFrmMainLabelGespendetTextEndeY, obFrmMainLabelFarbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "left", "center", true, false, true, "OnlineBanking_Client.lua, 8")) then -- Bargeld Text
+							if (OnlineBanking_DrawTextBalance("ingamespenden", obFrmMainLabelGespendetStandStartX, obFrmMainLabelGespendetStandStartY, obFrmMainLabelGespendetStandEndeX, obFrmMainLabelGespendetStandEndeY, farbe, obFrmMainLabelScale, obFrmMainLabelSchrift, "right", "center", true, false, true, "OnlineBanking_Client.lua, 9")) then
+								if (not obIsClientClickAdded and not obIsClientClickReallyAdded) then
+									if (addEventHandler("onClientClick", getRootElement(), OnlineBanking_ButtonClick)) then
+										obIsClientClickAdded = true
+										obIsClientClickReallyAdded = true
+									end
+								elseif (not obIsClientClickAdded and obIsClientClickReallyAdded) then
+									obIsClientClickAdded = true
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function OnlineBanking_ToggleShow() -- Anzeige Wechseln
+	if (obWindowOpen) then -- Fenster entfernen
+		if (obIsWindowUeberweisung) then
+			if (not OnlineBanking_RemoveHandlerUeberweisung()) then
+				showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", "OnlineBanking_Client.lua, 13")) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+			end
+		else
+			if (not OnlineBanking_RemoveHandler()) then
+				showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", "OnlineBanking_Client.lua, 1")) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+			end
+		end
+		if (not OnlineBanking_RemoveClickHandler()) then
+			showError(obMyPlayer, string.format("Kein Verwendungszweck angegeben.\nDu mußt einen Verwendungszweck angeben.", "OnlineBanking_Client.lua, 10")) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		end
+		obWindowOpen = not obWindowOpen
+		showCursor(false)
+	else -- Fenster anzeigen
+		if (not OnlineBanking_AddHandler()) then
+			showError(obMyPlayer, string.format("Achtung\nDer Code ist nur 3 Minuten gültig.", "OnlineBanking_Client.lua, 2")) -- Fehlermeldung, Eventhandler konnte nicht entfernt werden
+		end
+		showCursor(true)
+	end
+end
+addCommandHandler("ob", OnlineBanking_ToggleShow)
+
+
+
+
+
+
+
+
+
